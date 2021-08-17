@@ -4,13 +4,15 @@ set -x
 
 BUILDPACK_URL=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
 BUILDPACK_DIR=$(mktemp -d)
+curl -s $BUILDPACK_URL | tar xvz -C $BUILDPACK_DIR
 
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 APP_DIR=$BUILD_DIR/rails_application
 
-curl -s $BUILDPACK_URL | tar xvz -C $BUILDPACK_DIR
 $BUILDPACK_DIR/bin/detect  $APP_DIR
 $BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
 $BUILDPACK_DIR/bin/release $APP_DIR
+
+mv $APP_DIR/.profile.d $BUILD_DIR
