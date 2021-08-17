@@ -19,8 +19,9 @@ $BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
 $BUILDPACK_DIR/bin/release $APP_DIR
 
 cp "${BUILD_DIR}/${PROCFILE}" "${BUILD_DIR}/Procfile"
+sed -i -r -e "s|(bin/[a-z]+)|${HOME}/$(dirname ${PROCFILE})/\1|g" "${BUILD_DIR}/Procfile"
 
 mv $APP_DIR/.profile.d $BUILD_DIR
-sed -i -e "s|\$HOME/|\$HOME/$(dirname ${PROCFILE})/|g" $BUILD_DIR/.profile.d/*
+sed -i -e "s|\$HOME/|\$HOME/$(dirname ${PROCFILE})/|g" "${BUILD_DIR}/.profile.d/"*
 
 
