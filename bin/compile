@@ -3,7 +3,7 @@
 set -x
 
 BUILDPACK_URL=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
-BUILDPACK_DIR=mktemp
+BUILDPACK_DIR=$(mktemp)
 
 BUILD_DIR=$1
 CACHE_DIR=$2
