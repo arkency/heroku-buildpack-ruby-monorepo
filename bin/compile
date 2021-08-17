@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
 
-BUILDPACK_URL=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
-BUILDPACK_DIR=$(mktemp -d)
+buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
+buildpack_dir=$(mktemp -d)
 
-curl -s $BUILDPACK_URL | tar xvz -C $BUILDPACK_DIR
+curl -s $buildpack_url | tar xvz -C $buildpack_dir
 
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+build_dir=$1
+cache_dir=$2
+env_dir=$3
 
-PROCFILE=$(cat "${ENV_DIR}/PROCFILE")
-APP_DIR=$(dirname "${BUILD_DIR}/${PROCFILE}")
+procfile=$(cat "${env_dir}/PROCFILE")
+app_dir=$(dirname "${build_dir}/${procfile}")
 
-$BUILDPACK_DIR/bin/detect  $APP_DIR
-$BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
-$BUILDPACK_DIR/bin/release $APP_DIR > $BUILD_DIR/last_pack_release.out
+$buildpack_dir/bin/detect  $app_dir
+$buildpack_dir/bin/compile $app_dir $cache_dir $env_dir
+$buildpack_dir/bin/release $app_dir > $build_dir/last_pack_release.out
 
-cp "${BUILD_DIR}/${PROCFILE}" "${BUILD_DIR}/Procfile"
-sed -i -r -e "s|(bin/[a-z]+)|${HOME}/$(dirname ${PROCFILE})/\1|g" "${BUILD_DIR}/Procfile"
+cp "${build_dir}/${procfile}" "${build_dir}/Procfile"
+sed -i -r -e "s|(bin/[a-z]+)|${HOME}/$(dirname ${procfile})/\1|g" "${build_dir}/Procfile"
 
-mv $APP_DIR/.profile.d $BUILD_DIR
-sed -i -e "s|\$HOME/|\$HOME/$(dirname ${PROCFILE})/|g" "${BUILD_DIR}/.profile.d/"*
+mv $app_dir/.profile.d $build_dir
+sed -i -e "s|\$HOME/|\$HOME/$(dirname ${procfile})/|g" "${build_dir}/.profile.d/"*
 
 
