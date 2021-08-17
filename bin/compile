@@ -15,7 +15,7 @@ APP_DIR=$(dirname "${BUILD_DIR}/${PROCFILE}")
 
 $BUILDPACK_DIR/bin/detect  $APP_DIR
 $BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
-$BUILDPACK_DIR/bin/release $APP_DIR
+$BUILDPACK_DIR/bin/release $APP_DIR > $BUILD_DIR/last_pack_release.out
 
 cp "${BUILD_DIR}/${PROCFILE}" "${BUILD_DIR}/Procfile"
 sed -i -r -e "s|(bin/[a-z]+)|${HOME}/$(dirname ${PROCFILE})/\1|g" "${BUILD_DIR}/Procfile"
