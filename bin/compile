@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
 
 BUILDPACK_URL=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
 BUILDPACK_DIR=$(mktemp -d)
