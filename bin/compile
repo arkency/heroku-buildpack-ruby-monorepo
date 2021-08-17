@@ -16,3 +16,4 @@ $BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
 $BUILDPACK_DIR/bin/release $APP_DIR
 
 mv $APP_DIR/.profile.d $BUILD_DIR
+sed -i -e 's|$HOME/|$HOME/rails_application/|g' $BUILD_DIR/.profile.d/*
