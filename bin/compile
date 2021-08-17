@@ -11,16 +11,18 @@ cache_dir=$2
 env_dir=$3
 
 procfile=$(cat "${env_dir}/PROCFILE")
-app_dir=$(dirname "${build_dir}/${procfile}")
+outfile="${build_dir}/last_pack_release.out"
+src_app_dir=$(dirname "${build_dir}/${procfile}")
+dst_app_dir=$(dirname "${HOME}/${procfile}")
 
-$buildpack_dir/bin/detect  $app_dir
-$buildpack_dir/bin/compile $app_dir $cache_dir $env_dir
-$buildpack_dir/bin/release $app_dir > $build_dir/last_pack_release.out
+$buildpack_dir/bin/detect  $src_app_dir
+$buildpack_dir/bin/compile $src_app_dir $cache_dir $env_dir
+$buildpack_dir/bin/release $src_app_dir > $outfile
 
 cp "${build_dir}/${procfile}" "${build_dir}/Procfile"
-sed -i -r -e "s|(bin/[a-z]+)|${HOME}/$(dirname ${procfile})/\1|g" "${build_dir}/Procfile"
+sed -i -r -e "s|(bin/[a-z]+)|${dst_app_dir}/\1|g" "${build_dir}/Procfile"
 
-mv $app_dir/.profile.d $build_dir
-sed -i -e "s|\$HOME/|\$HOME/$(dirname ${procfile})/|g" "${build_dir}/.profile.d/"*
+mv "${src_app_dir}/.profile.d" $build_dir
+sed -i -e "s|\$HOME/|${dst_app_dir}/|g" "${build_dir}/.profile.d/"*
 
 
