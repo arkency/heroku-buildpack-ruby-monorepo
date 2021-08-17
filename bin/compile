@@ -11,12 +11,16 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-PROJECT_PATH=$(cat $ENV_DIR/PROJECT_PATH)
-APP_DIR=$BUILD_DIR/$PROJECT_PATH
+PROCFILE=$(cat "${ENV_DIR}/PROCFILE")
+APP_DIR=$(dirname "${BUILD_DIR}/${PROCFILE}")
 
 $BUILDPACK_DIR/bin/detect  $APP_DIR
 $BUILDPACK_DIR/bin/compile $APP_DIR $CACHE_DIR $ENV_DIR
 $BUILDPACK_DIR/bin/release $APP_DIR
 
+cp "${BUILD_DIR}/${PROCFILE}" "${BUILD_DIR}/Procfile"
+
 mv $APP_DIR/.profile.d $BUILD_DIR
-sed -i -e "s|\$HOME/|\$HOME/${PROJECT_PATH}/|g" $BUILD_DIR/.profile.d/*
+sed -i -e "s|\$HOME/|\$HOME/$(dirname ${PROCFILE})/|g" $BUILD_DIR/.profile.d/*
+
+
