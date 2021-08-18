@@ -7,7 +7,7 @@ copy_profile_d () {
   # move to top-level so that Heroku sources it
   mv "${build_dir}/${relative_app_dir}/.profile.d" $build_dir
 
-  if ! [ $? ]; then
+  if [[ $? != 0 ]]; then
 	  echo "Failed to write .profile.d scripts, aborting." | indent
 	  exit 1
   fi

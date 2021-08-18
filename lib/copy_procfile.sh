@@ -7,7 +7,7 @@ copy_procfile () {
   # copy to top-level in order for Heroku to recognize it
   cp "${build_dir}/${relative_app_dir}/Procfile" "${build_dir}/Procfile"
 
-  if ! [ $? ]; then
+  if [[ $? != 0 ]]; then
   	echo "Failed to copy Procfile, aborting." | indent
   	exit 1
   fi
