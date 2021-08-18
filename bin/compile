@@ -9,16 +9,15 @@ for import in "$(dirname ${bin_dir})/lib/"*; do
   source "$import"
 done
 
+require_env_variable $env_dir "APP_DIR"
+
 buildpack_url="https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz"
-procfile_path=$(get_env_variable ${env_dir} "PROCFILE")
-src_app_dir=$(dirname "${build_dir}/${procfile_path}")
+relative_app_dir=$(get_env_variable ${env_dir} "APP_DIR")
 
-require_env_variable $env_dir "PROCFILE"
+execute_buildpack "${build_dir}/${relative_app_dir}" $cache_dir $env_dir $buildpack_url "$(outfile $build_dir)"
 
-execute_buildpack $src_app_dir $cache_dir $env_dir $buildpack_url "$(outfile $build_dir)"
-
-copy_procfile  $build_dir $procfile_path
-copy_profile_d $build_dir $procfile_path
-copy_app_json  $build_dir $procfile_path
+copy_procfile  $build_dir $relative_app_dir
+copy_profile_d $build_dir $relative_app_dir
+copy_app_json  $build_dir $relative_app_dir
 
 

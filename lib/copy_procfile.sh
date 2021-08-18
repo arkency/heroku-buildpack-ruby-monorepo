@@ -2,11 +2,10 @@
 
 copy_procfile () {
   local build_dir=$1
-  local procfile_path=$2
-  local dst_app_dir=$(dirname "${HOME}/${procfile_path}")
+  local relative_app_dir=$2
 
   # copy to top-level in order for Heroku to recognize it
-  cp "${build_dir}/${procfile_path}" "${build_dir}/Procfile"
+  cp "${build_dir}/${relative_app_dir}/Procfile" "${build_dir}/Procfile"
 
   if ! [ $? ]; then
   	echo "Failed to copy Procfile, aborting." | indent
@@ -14,5 +13,5 @@ copy_procfile () {
   fi
 
   # replace relative paths (i.e. bin/rails) with absolute ones (such as /app/rails_application/bin/rails)
-  sed -i -r -e "s|(bin/[a-z]+)|${dst_app_dir}/\1|g" "${build_dir}/Procfile"
+  sed -i -r -e "s|(bin/[a-z]+)|${HOME}/${relative_app_dir}/\1|g" "${build_dir}/Procfile"
 }
