@@ -4,7 +4,7 @@
 build_dir=$1
 outfile="${build_dir}/last_pack_release.out"
 
-if [ -e $outfile ]; then
+if [[ -e $outfile ]]; then
   cat $outfile
   rm  $outfile
 fi

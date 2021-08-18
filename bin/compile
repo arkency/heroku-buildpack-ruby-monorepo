@@ -19,12 +19,12 @@ outfile="${build_dir}/last_pack_release.out"
 src_app_dir=$(dirname "${build_dir}/${procfile}")
 dst_app_dir=$(dirname "${HOME}/${procfile}")
 
-if [ -z $procfile ]; then
+if [[ -z $procfile ]]; then
 	echo "PROCFILE was not set, aborting." | indent
 	exit 1
 fi
 
-if [ ! -d $src_app_dir ]; then
+if [[ ! -d $src_app_dir ]]; then
 	echo "Given application path is empty, aborting." | indent
 	exit 1
 fi
