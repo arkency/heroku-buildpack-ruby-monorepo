@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 
+indent() {
+    sed -u 's/^/       /'
+}
+
 buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
 buildpack_dir=$(mktemp -d)
 
@@ -15,14 +19,36 @@ outfile="${build_dir}/last_pack_release.out"
 src_app_dir=$(dirname "${build_dir}/${procfile}")
 dst_app_dir=$(dirname "${HOME}/${procfile}")
 
+if [ -z $procfile ]; then
+	echo "PROCFILE was not set, aborting." | indent
+	exit 1
+fi
+
+if [ ! -d $src_app_dir ]; then
+	echo "Given application path is empty, aborting." | indent
+	exit 1
+fi
+
 $buildpack_dir/bin/detect  $src_app_dir
 $buildpack_dir/bin/compile $src_app_dir $cache_dir $env_dir
 $buildpack_dir/bin/release $src_app_dir > $outfile
 
 cp "${build_dir}/${procfile}" "${build_dir}/Procfile"
+
+if ! [ $? ]; then
+	echo "Failed to copy Procfile, aborting." | indent
+	exit 1
+fi
+
 sed -i -r -e "s|(bin/[a-z]+)|${dst_app_dir}/\1|g" "${build_dir}/Procfile"
 
 mv "${src_app_dir}/.profile.d" $build_dir
+
+if ! [ $? ]; then
+	echo "Failed to write .profile.d scripts, aborting." | indent
+	exit 1
+fi
+
 sed -i -e "s|\$HOME/|${dst_app_dir}/|g" "${build_dir}/.profile.d/"*
 
 
