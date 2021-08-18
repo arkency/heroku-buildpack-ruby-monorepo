@@ -3,50 +3,22 @@
 build_dir=$1
 cache_dir=$2
 env_dir=$3
-bin_dir=$(cd $(dirname $0); pwd)
-buildpack_dir=$(dirname $bin_dir)
+bin_dir=$(cd "$(dirname $0)"; pwd)
 
-for import in "${buildpack_dir}/lib/"*; do
+for import in "$(dirname ${bin_dir})/lib/"*; do
   source "$import"
 done
 
-buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
-procfile=$(cat "${env_dir}/PROCFILE")
-src_app_dir=$(dirname "${build_dir}/${procfile}")
-dst_app_dir=$(dirname "${HOME}/${procfile}")
+buildpack_url="https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz"
+procfile_path=$(get_env_variable ${env_dir} "PROCFILE")
+src_app_dir=$(dirname "${build_dir}/${procfile_path}")
 
-if [[ -z $procfile ]]; then
-	echo "PROCFILE was not set, aborting." | indent
-	exit 1
-fi
+require_env_variable $env_dir "PROCFILE"
 
-if [[ ! -d $src_app_dir ]]; then
-	echo "Given application path is empty, aborting." | indent
-	exit 1
-fi
+execute_buildpack $src_app_dir $cache_dir $env_dir $buildpack_url "$(outfile $build_dir)"
 
-execute_buildpack $src_app_dir $2 $env_dir $buildpack_url "$(outfile $build_dir)"
-
-cp "${build_dir}/${procfile}" "${build_dir}/Procfile"
-
-if ! [ $? ]; then
-	echo "Failed to copy Procfile, aborting." | indent
-	exit 1
-fi
-
-sed -i -r -e "s|(bin/[a-z]+)|${dst_app_dir}/\1|g" "${build_dir}/Procfile"
-
-mv "${src_app_dir}/.profile.d" $build_dir
-
-if ! [ $? ]; then
-	echo "Failed to write .profile.d scripts, aborting." | indent
-	exit 1
-fi
-
-sed -i -e "s|\$HOME/|${dst_app_dir}/|g" "${build_dir}/.profile.d/"*
-
-if [[ -f "${src_app_dir}/app.json" ]]; then
-	cp "${src_app_dir}/app.json" "${build_dir}/app.json"
-fi
+copy_procfile  $build_dir $procfile_path
+copy_profile_d $build_dir $procfile_path
+copy_app_json  $build_dir $procfile_path
 
 
