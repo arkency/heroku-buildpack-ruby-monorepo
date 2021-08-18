@@ -29,7 +29,9 @@ if [ ! -d $src_app_dir ]; then
 	exit 1
 fi
 
-$buildpack_dir/bin/detect  $src_app_dir
+framework=$($buildpack_dir/bin/detect  $src_app_dir)
+echo "-----> ${framework} app detected"
+
 $buildpack_dir/bin/compile $src_app_dir $cache_dir $env_dir
 $buildpack_dir/bin/release $src_app_dir > $outfile
 
