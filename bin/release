@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-
 build_dir=$1
-outfile="${build_dir}/last_pack_release.out"
+bin_dir=$(cd $(dirname $0); pwd)
+buildpack_dir=$(dirname $bin_dir)
 
-if [[ -e $outfile ]]; then
-  cat $outfile
-  rm  $outfile
+for import in "${buildpack_dir}/lib/"*; do
+  source "$import"
+done
+
+if [[ -e "$(outfile $build_dir)" ]]; then
+  cat "$(outfile $build_dir)"
+  rm  "$(outfile $build_dir)"
 fi
 

@@ -1,21 +1,17 @@
 #!/usr/bin/env bash
 
-
-indent() {
-    sed -u 's/^/       /'
-}
-
-buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
-buildpack_dir=$(mktemp -d)
-
-curl -s $buildpack_url | tar xz -C $buildpack_dir
-
 build_dir=$1
 cache_dir=$2
 env_dir=$3
+bin_dir=$(cd $(dirname $0); pwd)
+buildpack_dir=$(dirname $bin_dir)
 
+for import in "${buildpack_dir}/lib/"*; do
+  source "$import"
+done
+
+buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
 procfile=$(cat "${env_dir}/PROCFILE")
-outfile="${build_dir}/last_pack_release.out"
 src_app_dir=$(dirname "${build_dir}/${procfile}")
 dst_app_dir=$(dirname "${HOME}/${procfile}")
 
@@ -29,11 +25,7 @@ if [[ ! -d $src_app_dir ]]; then
 	exit 1
 fi
 
-framework=$($buildpack_dir/bin/detect  $src_app_dir)
-echo "-----> ${framework} app detected"
-
-$buildpack_dir/bin/compile $src_app_dir $cache_dir $env_dir
-$buildpack_dir/bin/release $src_app_dir > $outfile
+execute_buildpack $src_app_dir $2 $env_dir $buildpack_url "$(outfile $build_dir)"
 
 cp "${build_dir}/${procfile}" "${build_dir}/Procfile"
 
