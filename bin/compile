@@ -53,4 +53,8 @@ fi
 
 sed -i -e "s|\$HOME/|${dst_app_dir}/|g" "${build_dir}/.profile.d/"*
 
+if [[ -f "${src_app_dir}/app.json" ]]; then
+	cp "${src_app_dir}/app.json" "${build_dir}/app.json"
+fi
+
 
