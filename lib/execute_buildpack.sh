@@ -15,4 +15,8 @@ execute_buildpack () {
 
   $buildpack_dir/bin/compile $app_dir $cache_dir $env_dir
   $buildpack_dir/bin/release $app_dir > $outfile
+
+  if [[ ! -e "${app_dir}/Procfile" ]]; then
+    ruby -ryaml -e "puts YAML.dump(YAML.load_file('$outfile')['default_process_types'])" | tail +2 > "${app_dir}/Procfile"
+  fi
 }

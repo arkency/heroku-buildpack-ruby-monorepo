@@ -10,5 +10,6 @@ done
 if [[ -e "$(outfile $build_dir)" ]]; then
   cat "$(outfile $build_dir)"
   rm  "$(outfile $build_dir)"
+else
+  echo "--- {}"
 fi
-
