@@ -13,5 +13,5 @@ copy_profile_d () {
   fi
 
   # fix related paths to point to subdirectory where application lives
-  sed -i -e "s|\$HOME/|${HOME}/${relative_app_dir}/|g" "${build_dir}/.profile.d/"*
+  sed -i -e "s|\$HOME/|\$HOME/${relative_app_dir}/|g" "${build_dir}/.profile.d/"*
 }
