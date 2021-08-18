@@ -8,7 +8,7 @@ indent() {
 buildpack_url=https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/ruby.tgz
 buildpack_dir=$(mktemp -d)
 
-curl -s $buildpack_url | tar xvz -C $buildpack_dir
+curl -s $buildpack_url | tar xz -C $buildpack_dir
 
 build_dir=$1
 cache_dir=$2
