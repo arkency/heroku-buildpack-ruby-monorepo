@@ -1,5 +1,9 @@
 # heroku-buildpack-ruby-monorepo
 
+This is a Heroku Buildpack for Ruby, Rack, and Rails apps which are not in top-level of the repository. It relies on unchnaged [Heroku Buildpack for Ruby](https://github.com/heroku/heroku-buildpack-ruby) under the hood.
+
+### Synopsis
+
 Let's say you have following repository structure:
 ```
 .
