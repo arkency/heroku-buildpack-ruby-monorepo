@@ -1,6 +1,6 @@
 # heroku-buildpack-ruby-monorepo
 
-This is a Heroku Buildpack for Ruby, Rack, and Rails apps which are not in top-level of the repository. It relies on unchnaged [Heroku Buildpack for Ruby](https://github.com/heroku/heroku-buildpack-ruby) under the hood.
+This is a Heroku Buildpack for Ruby, Rack, and Rails apps which are not in top-level of the repository. It relies on unchanged [Heroku Buildpack for Ruby](https://github.com/heroku/heroku-buildpack-ruby) under the hood.
 
 ### Synopsis
 
@@ -67,7 +67,7 @@ Let it know, where the application is:
 heroku config:set APP_DIR=rails_application
 ```
 
-### Known imitations
+### Known limitations
 
 * [hardcoded Ruby buildpack](https://github.com/pawelpacana/heroku-buildpack-ruby-monorepo/blob/c65d5e719c44ee14194b263bf75e2504a76de226/bin/compile#L14), there was no need to make it generic so far
 
