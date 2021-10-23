@@ -59,7 +59,7 @@ Tell it where your application lives via `APP_DIR` variable and it will do the r
 
 Set it as your only buildpack first:
 ```
-heroku buildpacks:set https://github.com/pawelpacana/heroku-buildpack-ruby-monorepo
+heroku buildpacks:set https://github.com/arkency/heroku-buildpack-ruby-monorepo
 ```
 
 Let it know, where the application is:
@@ -69,7 +69,7 @@ heroku config:set APP_DIR=rails_application
 
 ### Known limitations
 
-* [hardcoded Ruby buildpack](https://github.com/pawelpacana/heroku-buildpack-ruby-monorepo/blob/c65d5e719c44ee14194b263bf75e2504a76de226/bin/compile#L14), there was no need to make it generic so far
+* [hardcoded Ruby buildpack](https://github.com/arkency/heroku-buildpack-ruby-monorepo/blob/c65d5e719c44ee14194b263bf75e2504a76de226/bin/compile#L14), there was no need to make it generic so far
 
 
 
