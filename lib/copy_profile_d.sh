@@ -6,13 +6,11 @@ copy_profile_d () {
 
   # move to top-level so that Heroku sources it
   mkdir -p "${build_dir}/.profile.d"
-  cp "${build_dir}/${relative_app_dir}/.profile.d/*" "${build_dir}/.profile.d/" # 2>/dev/null
+  
+  cp ${build_dir}/${relative_app_dir}/.profile.d/* ${build_dir}/.profile.d/ 2>/dev/null
 
   if [[ $? != 0 ]]; then
 	  echo "Failed to write .profile.d scripts, aborting." | indent
-    echo "Let's see what's going on:" | indent
-    ls -al "${build_dir}/.profile.d"
-    ls -al "${build_dir}/${relative_app_dir}/.profile.d"
 	  exit 1
   fi
 
